@@ -13,6 +13,7 @@ const _ = require("lodash");
 class WhenIWorkApi {
     constructor(apikey, ...args) {
         let token, username, password, userId, options;
+        // TODO: fix me
         if (_.isString(args[0]) && _.isString(args[1])) {
             username = args[0];
             password = args[1];
@@ -39,7 +40,10 @@ class WhenIWorkApi {
         this.account;
         this.config = options;
         this.log = options.logFn;
-        this.ready = this.login();
+        this.logged_in = false;
+        // I'd use a defrred here but whatever.
+        //this.ready = defer();
+        // this.ready = this.login();
     }
     _request(options, nolog = false) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -54,17 +58,19 @@ class WhenIWorkApi {
             if (this.config.logRequests && !nolog) {
                 this.log(options.method, options.uri, { qs: options.qs, body: options.body });
             }
-            return request(options)
-                .catch(err => {
-                throw new WIWError(err);
-            });
+            return request(options);
+            // .catch(err => {
+            //   throw new WIWError(err);
+            // });
         });
     }
     request(options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.ready;
-            return this._request(options);
-        });
+        // TODO: fix me
+        if (!this.logged_in) {
+            throw new WIWError("Not Logged In");
+        }
+        //await this.ready;
+        return this._request(options);
     }
     get(uri, query) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -106,7 +112,9 @@ class WhenIWorkApi {
     }
     login() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.logged_in = false;
             if (this.user && this.account) {
+                this.logged_in = true;
                 return { user: this.user, account: this.account };
             }
             let req = {
@@ -155,6 +163,7 @@ class WhenIWorkApi {
                     }
                 });
             }
+            this.logged_in = true;
             return { user: this.user, account: this.account };
         });
     }

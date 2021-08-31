@@ -21,12 +21,15 @@ export class WhenIWorkApi {
   config: WhenIWorkOptions;
   log: Function;
   error: Function;
+  logged_in: any;
   ready: any;
 
   constructor(apikey: string, username: string, password: string, options?:WhenIWorkOptions);
   constructor(apikey: string, token: string, userId: number, options?: WhenIWorkOptions);
   constructor(apikey: string, ...args) {
     let token: string, username: string, password: string, userId: number, options: WhenIWorkOptions;
+
+    // TODO: fix me
     if (_.isString(args[0]) && _.isString(args[1])) {
       username = args[0];
       password = args[1];
@@ -53,12 +56,15 @@ export class WhenIWorkApi {
     this.user;
     this.userId = userId;
     this.account;
-    
+
     this.config = options;
     this.log = options.logFn;
 
+    this.logged_in = false;
 
-    this.ready = this.login();
+    // I'd use a defrred here but whatever.
+    //this.ready = defer();
+    // this.ready = this.login();
   }
 
   async _request (options, nolog = false): Promise<any> {
@@ -76,13 +82,17 @@ export class WhenIWorkApi {
     }
 
     return request(options)
-      .catch(err => {
-        throw new WIWError(err);
-      });
+      // .catch(err => {
+      //   throw new WIWError(err);
+      // });
   }
 
-  async request(options): Promise<any> {
-    await this.ready;  
+  request(options): Promise<any> {
+    // TODO: fix me
+    if (!this.logged_in) {
+      throw new WIWError("Not Logged In");
+    }
+    //await this.ready;
     return this._request(options);
   }
 
@@ -134,7 +144,10 @@ export class WhenIWorkApi {
   }
 
   async login (): Promise<{user: types.User, account: types.Account}> {
+    this.logged_in = false;
+
     if (this.user && this.account) {
+      this.logged_in = true;
       return {user: this.user, account: this.account};
     }
 
@@ -154,14 +167,14 @@ export class WhenIWorkApi {
       };
     }
     let res = await this._request(req, true);
-    
+
     this.token = res.login.token;
-    
+
     if (res.user) {
       this.user = res.user;
       this.userId = this.user.id;
       this.account = res.account;
-    } 
+    }
     else if (res.users && this.accountId) {
       for (let user of res.users) {
         if (user.account_id === this.accountId) {
@@ -185,8 +198,8 @@ export class WhenIWorkApi {
         }
       });
     }
-    
 
+    this.logged_in = true;
     return {user: this.user, account: this.account};
   }
 }

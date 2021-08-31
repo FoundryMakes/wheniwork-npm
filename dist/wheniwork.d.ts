@@ -14,6 +14,7 @@ export declare class WhenIWorkApi {
     config: WhenIWorkOptions;
     log: Function;
     error: Function;
+    logged_in: any;
     ready: any;
     constructor(apikey: string, username: string, password: string, options?: WhenIWorkOptions);
     constructor(apikey: string, token: string, userId: number, options?: WhenIWorkOptions);
