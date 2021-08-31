@@ -1,0 +1,45 @@
+{
+  "name": "wheniwork",
+  "version": "2.0.4",
+  "description": "WhenIWork API wrapper",
+  "main": "./dist/wheniwork.js",
+  "types": "./dist/wheniwork.d.ts",
+  "repository": "https://github.com/jgr3go/node-wheniwork.git",
+  "author": "Jon Gregorowicz <jonathan.gregorowicz@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "npm run build && jest",
+    "build": "tsc",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "lodash": "^4.17.4",
+    "request": "^2.80.0",
+    "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "@types/lodash": "^4.14.107",
+    "@types/request-promise": "^4.1.41",
+    "jest": "^19.0.2",
+    "ts-jest": "^22.4.4",
+    "ts-node": "^6.0.0",
+    "typescript": "2.x"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "clearMocks": true,
+    "testPathIgnorePatterns": [
+      "\\node_modules\\",
+      "\\dist\\"
+    ],
+    "testRegex": "\\.(test|spec)\\.(js|ts)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  }
+}
