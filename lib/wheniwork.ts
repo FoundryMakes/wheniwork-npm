@@ -213,10 +213,16 @@ export class WIWError extends Error {
 
   constructor(err) {
     super(err);
-    this.status = err.statusCode;
-    var data = err.error || { code: "unknown", error: err };
-    this.code = data.code;
-    this.message = `${this.code} - ${err.error || 'undefined'}`;
+    if (err && err.error) {
+      this.status = err.statusCode;
+      var data = err.error || { code: "unknown", error: err };
+      this.code = data.code;
+      this.message = `${this.code} - ${err.error || 'undefined'}`;
+    } else {
+        this.status = 0;
+        this.code = 'Err is not defined in WIW npm module';
+        this.message = `Err is not defined in WIW npm module`;
+    };
   }
 
   toJSON() {
