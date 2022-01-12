@@ -214,7 +214,8 @@ export class WIWError extends Error {
   constructor(err) {
     super(err);
     this.status = err.statusCode;
-    this.code = err.error.code;
+    var data = err.error || err || { code: "unknown", error: err };
+    this.code = data.code;
     this.message = `${this.code} - ${err.error.error}`;
   }
 
