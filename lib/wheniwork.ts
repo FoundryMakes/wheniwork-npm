@@ -93,7 +93,7 @@ export class WhenIWorkApi {
         statusCode: 0,
         error: {
           code: 'NOT_LOGGED_IN',
-          error: 'WIW client is not logged in'
+          message: 'WIW client is not logged in'
         }
       });
     }
@@ -199,7 +199,7 @@ export class WhenIWorkApi {
         statusCode: 400,
         error: {
           code: 'USER_ERROR',
-          error: 'WhenIWork responded with multiple users but there was no matching `accountId` in options'
+          message: 'WhenIWork responded with multiple users but there was no matching `accountId` in options'
         }
       });
     }
@@ -222,7 +222,7 @@ export class WIWError extends Error {
       this.status = err.statusCode;
       var data = err.error || { code: "unknown", error: err };
       this.code = data.code;
-      this.message = `${this.code} - ${err.error || 'undefined'}`;
+      this.message = `${this.code} - ${err.error.message || 'undefined'}`;
     } else {
         this.status = 0;
         this.code = 'Err is not defined in WIW npm module';
