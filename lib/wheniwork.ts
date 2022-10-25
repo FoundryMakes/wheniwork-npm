@@ -91,8 +91,10 @@ export class WhenIWorkApi {
     if (!this.logged_in) {
       throw new WIWError({
         statusCode: 0,
-        code: 'NOT_LOGGED_IN',
-        message: 'WIW client is not logged in.'
+        error: {
+          code: 'NOT_LOGGED_IN',
+          error: 'WIW client is not logged in'
+        }
       });
     }
     //await this.ready;
