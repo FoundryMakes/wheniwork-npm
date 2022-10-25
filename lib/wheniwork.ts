@@ -88,9 +88,12 @@ export class WhenIWorkApi {
   }
 
   request(options): Promise<any> {
-    // TODO: fix me
     if (!this.logged_in) {
-      throw new WIWError("Not Logged In");
+      throw new WIWError({
+        statusCode: 0,
+        code: 'NOT_LOGGED_IN',
+        message: 'WIW client is not logged in.'
+      });
     }
     //await this.ready;
     return this._request(options);
